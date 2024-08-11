@@ -22,7 +22,7 @@ import javax.persistence.PostUpdate;
 @Component
 public class QndevStateChangedEventListener {
 
-    private Log log = LogFactory.getLog(this.getClass());
+    private final Log log = LogFactory.getLog(this.getClass());
 
     @Autowired
     private JobLauncher jobLauncher;

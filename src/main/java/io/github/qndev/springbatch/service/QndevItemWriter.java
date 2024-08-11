@@ -10,7 +10,7 @@ import java.util.List;
 
 public class QndevItemWriter implements ItemWriter<QndevWriter> {
 
-    private Log log = LogFactory.getLog(this.getClass());
+    private final Log log = LogFactory.getLog(this.getClass());
     private final QndevWriterRepository qndevWriterRepository;
 
     public QndevItemWriter(QndevWriterRepository qndevWriterRepository) {

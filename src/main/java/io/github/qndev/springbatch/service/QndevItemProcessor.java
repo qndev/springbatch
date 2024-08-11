@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class QndevItemProcessor implements ItemProcessor<Qndev, QndevWriter> {
 
-    private Log log = LogFactory.getLog(this.getClass());
+    private final Log log = LogFactory.getLog(this.getClass());
 
     @Nullable
     @Override

@@ -6,6 +6,7 @@ import io.github.qndev.springbatch.repository.QndevRepository;
 import io.github.qndev.springbatch.repository.QndevWriterRepository;
 import io.github.qndev.springbatch.service.QndevItemProcessor;
 import io.github.qndev.springbatch.service.QndevItemWriter;
+import io.github.qndev.springbatch.statechanged.event.QndevJobExecutionListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -36,6 +37,7 @@ public class JobConfiguration {
     public Job qndevJob(@Qualifier("qndevStep") Step qndevStep) {
         return jobBuilderFactory.get("qndevJob")
                 .start(qndevStep)
+                .listener(new QndevJobExecutionListener())
                 .build();
     }
 
@@ -48,6 +50,9 @@ public class JobConfiguration {
                 .reader(qndevItemReader)
                 .processor(qndevItemProcessor)
                 .writer(qndevItemWriter)
+                .faultTolerant()
+                .retry(Exception.class)
+                .retryLimit(3)
                 .allowStartIfComplete(true)
                 .build();
     }

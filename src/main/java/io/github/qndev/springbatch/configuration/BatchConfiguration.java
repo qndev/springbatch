@@ -1,10 +1,13 @@
 package io.github.qndev.springbatch.configuration;
 
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.BatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,12 +60,35 @@ public class BatchConfiguration {
 
     @Bean
     @Order(5)
+    public JobRegistry jobRegistry() {
+        return new MapJobRegistry();
+    }
+
+    @Bean
+    @Order(6)
+    public SimpleJobOperator jobOperator(JobExplorer jobExplorer,
+                                         JobRepository jobRepository,
+                                         JobRegistry jobRegistry,
+                                         JobLauncher jobLauncher) throws Exception {
+
+        SimpleJobOperator jobOperator = new SimpleJobOperator();
+        jobOperator.setJobExplorer(jobExplorer);
+        jobOperator.setJobRepository(jobRepository);
+        jobOperator.setJobRegistry(jobRegistry);
+        jobOperator.setJobLauncher(jobLauncher);
+        jobOperator.afterPropertiesSet();
+
+        return jobOperator;
+    }
+
+    @Bean
+    @Order(7)
     public JobBuilderFactory jobBuilderFactory(JobRepository jobRepository) {
         return new JobBuilderFactory(jobRepository);
     }
 
     @Bean
-    @Order(6)
+    @Order(8)
     public StepBuilderFactory stepBuilderFactory(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilderFactory(jobRepository, transactionManager);
     }
