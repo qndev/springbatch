@@ -28,6 +28,9 @@ public class BatchDataSourceConfiguration {
         this.resourceLoader = resourceLoader;
     }
 
+    /**
+     * Initialize the batch schema in the database
+     */
     @PostConstruct
     protected void initialize() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();

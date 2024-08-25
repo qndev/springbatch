@@ -41,6 +41,12 @@ public class JobConfiguration {
                 .build();
     }
 
+    /**
+     * These beans are then used in the qndevStep bean to define a step of the batch job. <br>
+     * The step reads Qndev entities, processes them into QndevWriter entities, and then writes those entities. <br>
+     * It processes and writes entities in chunks of 10. <br>
+     * If an exception occurs during processing or writing, the step retries up to 3 times.
+     */
     @Bean
     public Step qndevStep(ItemReader<Qndev> qndevItemReader,
                           ItemProcessor<Qndev, QndevWriter> qndevItemProcessor,
@@ -57,6 +63,10 @@ public class JobConfiguration {
                 .build();
     }
 
+    /**
+     * The ItemReader<Qndev> bean named qndevItemReader is defined using the RepositoryItemReaderBuilder. <br>
+     * It reads Qndev entities from the QndevRepository in pages of size 10 and sorts them in ascending order by id.
+     */
     @Bean
     public ItemReader<Qndev> qndevItemReader(QndevRepository qndevRepository) {
         return new RepositoryItemReaderBuilder<Qndev>()
@@ -70,11 +80,19 @@ public class JobConfiguration {
                 .build();
     }
 
+    /**
+     * The ItemProcessor<Qndev, QndevWriter> bean named qndevItemProcessor is defined using the QndevItemProcessor class. <br>
+     * It processes Qndev entities and transforms them into QndevWriter entities.
+     */
     @Bean
     public ItemProcessor<Qndev, QndevWriter> qndevItemProcessor() {
         return new QndevItemProcessor();
     }
 
+    /**
+     * The ItemWriter<QndevWriter> bean named qndevItemWriter is defined using the QndevItemWriter class. <br>
+     * It writes QndevWriter entities to the QndevWriterRepository.
+     */
     @Bean
     public ItemWriter<QndevWriter> qndevItemWriter(QndevWriterRepository qndevWriterRepository) {
         return new QndevItemWriter(qndevWriterRepository);

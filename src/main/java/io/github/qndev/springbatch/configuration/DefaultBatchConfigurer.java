@@ -30,6 +30,9 @@ public class DefaultBatchConfigurer implements BatchConfigurer {
         this.transactionManager = transactionManager;
     }
 
+    /**
+     * Initialize the {@link JobRepository}, {@link JobExplorer}, and {@link JobLauncher}
+     */
     @PostConstruct
     public void initialize() {
         try {
